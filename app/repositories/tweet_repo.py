@@ -111,8 +111,9 @@ class TweetRepository:
         """Fetch the most recent tweets by a user (used for backfill on follow)."""
         result = await session.execute(
             select(Tweet)
+            .options(joinedload(Tweet.author))
             .where(Tweet.user_id == user_id)
             .order_by(Tweet.created_at.desc())
             .limit(limit)
         )
-        return list(result.scalars().all())
+        return list(result.unique().scalars().all())

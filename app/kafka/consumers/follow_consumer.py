@@ -82,7 +82,7 @@ async def start_follow_consumer() -> None:
                                 "id": str(tweet.id),
                                 "content": tweet.content,
                                 "user_id": str(tweet.user_id),
-                                "username": "",
+                                "username": tweet.author.username if hasattr(tweet, 'author') and tweet.author else "",
                                 "created_at": tweet.created_at.isoformat(),
                             })
 

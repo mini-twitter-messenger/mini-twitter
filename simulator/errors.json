@@ -1,0 +1,184 @@
+[
+  {
+    "time": "22:26:07",
+    "user": "sim_user_0",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:08",
+    "user": "sim_user_1",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:08",
+    "user": "sim_user_2",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:10",
+    "user": "sim_user_3",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:11",
+    "user": "sim_user_4",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:11",
+    "user": "sim_user_5",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:13",
+    "user": "sim_user_6",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:14",
+    "user": "sim_user_7",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:15",
+    "user": "sim_user_8",
+    "action": "register",
+    "status": 400,
+    "detail": "{'detail': 'Username already taken', 'code': 'DUPLICATE_USERNAME'}"
+  },
+  {
+    "time": "22:26:15",
+    "user": "sim_user_8",
+    "action": "login",
+    "status": 503,
+    "detail": "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503 Service Temporarily Una"
+  },
+  {
+    "time": "22:26:16",
+    "user": "sim_user_9",
+    "action": "register",
+    "status": 503,
+    "detail": "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503 Service Temporarily Una"
+  },
+  {
+    "time": "22:26:16",
+    "user": "sim_user_9",
+    "action": "login",
+    "status": 503,
+    "detail": "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503 Service Temporarily Una"
+  },
+  {
+    "time": "22:26:38",
+    "user": "sim_user_1",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:26:41",
+    "user": "sim_user_2",
+    "action": "follow_user",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:26:42",
+    "user": "sim_user_3",
+    "action": "follow_user",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:26:50",
+    "user": "sim_user_7",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:26:58",
+    "user": "sim_user_5",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:26:59",
+    "user": "sim_user_4",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:02",
+    "user": "sim_user_6",
+    "action": "follow_user",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:05",
+    "user": "sim_user_0",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:10",
+    "user": "sim_user_1",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:13",
+    "user": "sim_user_5",
+    "action": "unfollow_user",
+    "status": 400,
+    "detail": "{'detail': 'Not following this user', 'code': 'NOT_FOLLOWING'}"
+  },
+  {
+    "time": "22:27:14",
+    "user": "sim_user_3",
+    "action": "follow_user",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:18",
+    "user": "sim_user_1",
+    "action": "unfollow_user",
+    "status": 400,
+    "detail": "{'detail': 'Not following this user', 'code': 'NOT_FOLLOWING'}"
+  },
+  {
+    "time": "22:27:20",
+    "user": "sim_user_2",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  },
+  {
+    "time": "22:27:46",
+    "user": "sim_user_3",
+    "action": "create_tweet",
+    "status": 0,
+    "detail": ""
+  }
+]

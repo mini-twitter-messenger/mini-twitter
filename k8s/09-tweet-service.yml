@@ -1,0 +1,81 @@
+---
+# Deployment for Tweet Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tweet-service
+  namespace: mini-twitter
+  labels:
+    app: tweet-service
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tweet-service
+  template:
+    metadata:
+      labels:
+        app: tweet-service
+    spec:
+      containers:
+        - name: tweet-service
+          image: mini-twitter-backend:latest
+          imagePullPolicy: Never
+          command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: "tweet"
+            - name: INSTANCE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          envFrom:
+            - configMapRef:
+                name: mini-twitter-config
+            - secretRef:
+                name: mini-twitter-secret
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+---
+# ClusterIP Service for Tweet Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: tweet-service
+  namespace: mini-twitter
+  labels:
+    app: tweet-service
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  type: ClusterIP
+  selector:
+    app: tweet-service
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP

@@ -1,0 +1,62 @@
+---
+# Deployment for Frontend (React + Nginx)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: mini-twitter
+  labels:
+    app: frontend
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: mini-twitter-frontend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+---
+# ClusterIP Service for Frontend
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: mini-twitter
+  labels:
+    app: frontend
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  type: ClusterIP
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

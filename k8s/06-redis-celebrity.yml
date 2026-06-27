@@ -1,0 +1,99 @@
+---
+# PersistentVolumeClaim for Redis celebrity AOF data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-celebrity-pvc
+  namespace: mini-twitter
+  labels:
+    app: redis-celebrity
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+
+---
+# Deployment for Redis celebrity
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-celebrity
+  namespace: mini-twitter
+  labels:
+    app: redis-celebrity
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-celebrity
+  template:
+    metadata:
+      labels:
+        app: redis-celebrity
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          command:
+            - redis-server
+            - "--maxmemory"
+            - "128mb"
+            - "--maxmemory-policy"
+            - "allkeys-lru"
+            - "--appendonly"
+            - "yes"
+            - "--appendfilename"
+            - "appendonly.aof"
+            - "--dir"
+            - "/data"
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "200Mi"
+              cpu: "150m"
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-celebrity-pvc
+
+---
+# ClusterIP Service for Redis celebrity
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-celebrity
+  namespace: mini-twitter
+  labels:
+    app: redis-celebrity
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  type: ClusterIP
+  selector:
+    app: redis-celebrity
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mini-twitter-config
+  namespace: mini-twitter
+  labels:
+    app.kubernetes.io/part-of: mini-twitter
+data:
+  # Redis
+  REDIS_URL: "redis://redis-main:6379/0"
+  CELEBRITY_REDIS_URL: "redis://redis-celebrity:6379/0"
+  # Kafka
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  # Auth (non-sensitive)
+  JWT_ALGORITHM: "HS256"
+  JWT_ACCESS_TOKEN_EXPIRE_MINUTES: "1440"
+  # App
+  LOG_LEVEL: "INFO"
+  CELEBRITY_THRESHOLD: "10000"
+  # Rate limiting
+  RATE_LIMIT_PER_MINUTE: "100"

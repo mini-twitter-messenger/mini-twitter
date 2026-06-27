@@ -1,0 +1,40 @@
+---
+# Job to run Alembic database migrations
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alembic-migration
+  namespace: mini-twitter
+  labels:
+    app: alembic-migration
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: alembic-migration
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migration
+          image: mini-twitter-backend:latest
+          imagePullPolicy: Never
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - configMapRef:
+                name: mini-twitter-config
+            - secretRef:
+                name: mini-twitter-secret
+          env:
+            - name: SERVICE_NAME
+              value: "migration"
+            - name: INSTANCE_ID
+              value: "0"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"

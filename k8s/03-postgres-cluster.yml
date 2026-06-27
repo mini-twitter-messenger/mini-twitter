@@ -1,0 +1,35 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+  namespace: mini-twitter
+  labels:
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  instances: 3  # 1 primary + 2 read replicas (auto-managed by operator)
+
+  storage:
+    size: 1Gi   # PVC per instance (auto-provisioned via default StorageClass)
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "64MB"
+      effective_cache_size: "128MB"
+      work_mem: "4MB"
+      maintenance_work_mem: "32MB"
+
+  bootstrap:
+    initdb:
+      database: twitter
+      owner: twitter
+      secret:
+        name: postgres-credentials
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"

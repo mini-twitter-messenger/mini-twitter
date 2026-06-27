@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────
+#  Mini Twitter — Async User Simulator Configuration
+# ─────────────────────────────────────────────────────────────
+
+server:
+  base_url: "http://localhost:80"       # Nginx entry point
+
+simulation:
+  num_users: 10                         # Concurrent simulated users
+  actions_per_user: 5                   # Actions each user performs before stopping
+  delay_min_seconds: 1                   # Minimum random pause between actions
+  delay_max_seconds: 10                  # Maximum random pause between actions
+  ramp_up_seconds: 10                    # Spread user starts over this window
+
+users:
+  password: "simulator_pass_123"         # Shared password for all test users
+  username_prefix: "sim_user_"           # Usernames: sim_user_0, sim_user_1, …
+  email_domain: "simulator.test"         # Emails:   sim_user_0@simulator.test
+
+# Action weights (higher = more likely to be picked)
+# Must match actions implemented in the backend
+action_weights:
+  create_tweet: 25            # POST /tweets/
+  home_timeline: 20           # GET  /timeline/home
+  user_timeline: 15           # GET  /timeline/user/{id}
+  get_profile: 10             # GET  /users/{id}/profile
+  follow_user: 10             # POST /users/{id}/follow
+  unfollow_user: 5            # DEL  /users/{id}/follow
+  get_tweet: 5                # GET  /tweets/{id}
+  delete_tweet: 2             # DEL  /tweets/{id}
+  search_users: 5             # GET  /users/search?q=
+  get_followers: 2            # GET  /users/{id}/followers
+  get_following: 1            # GET  /users/{id}/following
+
+monitoring:
+  stats_interval_seconds: 5             # Print dashboard every N seconds
+  log_errors: true                       # Log every failed request to console

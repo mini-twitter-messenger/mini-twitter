@@ -1,4 +1,5 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import pool
@@ -12,6 +13,12 @@ from app.models.tweet import Tweet  # noqa: F401
 from app.models.follower import Follower  # noqa: F401
 
 config = context.config
+
+# Override sqlalchemy.url from environment if available.
+# In Kubernetes the POSTGRES_PRIMARY_URL env var is injected by the Secret;
+# alembic.ini contains the Docker Compose default as a fallback.
+if os.environ.get("POSTGRES_PRIMARY_URL"):
+    config.set_main_option("sqlalchemy.url", os.environ["POSTGRES_PRIMARY_URL"])
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

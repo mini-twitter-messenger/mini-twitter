@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     # Service identification
     SERVICE_NAME: str = "user"
-    INSTANCE_ID: int = 1
+    INSTANCE_ID: str = "1"
 
     model_config = {
         "env_file": ".env",

@@ -1,5 +1,6 @@
 ---
 # Job to run Alembic database migrations
+# Uses an initContainer to wait for PostgreSQL readiness before migrating.
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,13 +10,51 @@ metadata:
     app: alembic-migration
     app.kubernetes.io/part-of: mini-twitter
 spec:
-  backoffLimit: 3
+  backoffLimit: 5
   template:
     metadata:
       labels:
         app: alembic-migration
     spec:
       restartPolicy: OnFailure
+      initContainers:
+        # Wait for PostgreSQL to accept connections before running migrations.
+        # Prevents failures during CloudNativePG failovers or cold starts.
+        # Uses Python (already in the image) instead of pg_isready.
+        - name: wait-for-postgres
+          image: mini-twitter-backend:latest
+          imagePullPolicy: Never
+          command:
+            - "python"
+            - "-c"
+            - |
+              import socket, sys, time, os
+              host = os.environ["PGHOST"]
+              port = int(os.environ["PGPORT"])
+              print(f"Waiting for PostgreSQL at {host}:{port}...")
+              for attempt in range(1, 61):
+                  try:
+                      sock = socket.create_connection((host, port), timeout=2)
+                      sock.close()
+                      print(f"PostgreSQL is ready after {attempt} attempt(s).")
+                      sys.exit(0)
+                  except OSError:
+                      print(f"Attempt {attempt}/60: PostgreSQL not ready, retrying in 2s...")
+                      time.sleep(2)
+              print("ERROR: PostgreSQL did not become ready within 120 seconds.")
+              sys.exit(1)
+          env:
+            - name: PGHOST
+              value: "postgres-cluster-rw"
+            - name: PGPORT
+              value: "5432"
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "25m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       containers:
         - name: migration
           image: mini-twitter-backend:latest
@@ -38,3 +77,4 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "200m"
+

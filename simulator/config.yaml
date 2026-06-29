@@ -3,7 +3,7 @@
 # ─────────────────────────────────────────────────────────────
 
 server:
-  base_url: "http://localhost:80"       # Nginx entry point
+  base_url: "http://mini-twitter.local:8080"   # Kubernetes Ingress entry point
 
 simulation:
   num_users: 10                         # Concurrent simulated users

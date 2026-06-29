@@ -115,7 +115,7 @@ class UserAgent:
             self.username, self.email, self.password
         )
         if status == 201 and data:
-            self.user_id = data.get("id")
+            self.user_id = str(data.get("id", ""))
             logger.debug("%s registered (id=%s)", self.username, self.user_id)
         elif status in (400, 409, 422):
             # Already exists or validation error — try to login anyway
@@ -134,7 +134,7 @@ class UserAgent:
             # The JWT sub claim has the user_id; we'll get it from profile search
             status2, data2, _ = await self.client.search_users(self.username, limit=1)
             if status2 == 200 and data2 and len(data2) > 0:
-                self.user_id = data2[0].get("id")
+                self.user_id = str(data2[0].get("id", ""))
 
         if self.user_id:
             self.pools.user_ids.append(self.user_id)
@@ -188,7 +188,7 @@ class UserAgent:
 
         status, data, _ = await self.client.create_tweet(content)
         if status == 201 and data and "id" in data:
-            tweet_id = data["id"]
+            tweet_id = str(data["id"])
             self.pools.tweet_ids.append(tweet_id)
             if self.user_id:
                 self.pools.my_tweets.setdefault(self.user_id, []).append(tweet_id)

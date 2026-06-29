@@ -34,7 +34,7 @@ All tunables are in [`config.yaml`](config.yaml):
 ```
 simulator/
 ├── config.yaml       # All configuration
-├── requirements.txt  # aiohttp, pyyaml, rich
+├── requirements.txt  # httpx, pyyaml, rich
 ├── simulator.py      # Entry point: orchestration + dashboard
 ├── api_client.py     # HTTP client wrapping all 14 endpoints
 ├── user_agent.py     # Single user behavior loop

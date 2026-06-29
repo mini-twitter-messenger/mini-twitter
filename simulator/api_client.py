@@ -72,7 +72,7 @@ class MiniTwitterClient:
                 data = resp.text
         except Exception as exc:
             status = 0
-            data = {"detail": str(exc)}
+            data = {"detail": f"{type(exc).__name__}: {exc}"}
         finally:
             latency = (time.perf_counter() - start) * 1000  # ms
 
@@ -127,24 +127,24 @@ class MiniTwitterClient:
 
     async def get_profile(self, user_id: str) -> tuple[int, Any, float]:
         return await self._request(
-            "GET", f"/users/{user_id}/profile", "get_profile",
+            "GET", f"/users/{str(user_id)}/profile", "get_profile",
         )
 
     async def follow_user(self, user_id: str) -> tuple[int, Any, float]:
         return await self._request(
-            "POST", f"/users/{user_id}/follow", "follow_user", auth=True,
+            "POST", f"/users/{str(user_id)}/follow", "follow_user", auth=True,
         )
 
     async def unfollow_user(self, user_id: str) -> tuple[int, Any, float]:
         return await self._request(
-            "DELETE", f"/users/{user_id}/follow", "unfollow_user", auth=True,
+            "DELETE", f"/users/{str(user_id)}/follow", "unfollow_user", auth=True,
         )
 
     async def get_followers(
         self, user_id: str, limit: int = 20, offset: int = 0
     ) -> tuple[int, Any, float]:
         return await self._request(
-            "GET", f"/users/{user_id}/followers", "get_followers",
+            "GET", f"/users/{str(user_id)}/followers", "get_followers",
             params={"limit": limit, "offset": offset},
         )
 
@@ -152,7 +152,7 @@ class MiniTwitterClient:
         self, user_id: str, limit: int = 20, offset: int = 0
     ) -> tuple[int, Any, float]:
         return await self._request(
-            "GET", f"/users/{user_id}/following", "get_following",
+            "GET", f"/users/{str(user_id)}/following", "get_following",
             params={"limit": limit, "offset": offset},
         )
 
@@ -166,12 +166,12 @@ class MiniTwitterClient:
 
     async def delete_tweet(self, tweet_id: str) -> tuple[int, Any, float]:
         return await self._request(
-            "DELETE", f"/tweets/{tweet_id}", "delete_tweet", auth=True,
+            "DELETE", f"/tweets/{str(tweet_id)}", "delete_tweet", auth=True,
         )
 
     async def get_tweet(self, tweet_id: str) -> tuple[int, Any, float]:
         return await self._request(
-            "GET", f"/tweets/{tweet_id}", "get_tweet",
+            "GET", f"/tweets/{str(tweet_id)}", "get_tweet",
         )
 
     # ──────────────────── Timeline ────────────────────
@@ -188,6 +188,6 @@ class MiniTwitterClient:
         self, user_id: str, limit: int = 20, offset: int = 0
     ) -> tuple[int, Any, float]:
         return await self._request(
-            "GET", f"/timeline/user/{user_id}", "user_timeline",
+            "GET", f"/timeline/user/{str(user_id)}", "user_timeline",
             params={"limit": limit, "offset": offset},
         )

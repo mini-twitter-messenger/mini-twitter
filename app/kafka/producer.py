@@ -17,12 +17,14 @@ class KafkaProducerWrapper:
 
     async def start(self) -> None:
         """Start the Kafka producer."""
-        self._producer = AIOKafkaProducer(
+        producer = AIOKafkaProducer(
             bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
             value_serializer=lambda v: json.dumps(v).encode("utf-8"),
             key_serializer=lambda k: k.encode("utf-8") if k else None,
+            request_timeout_ms=5000,
         )
-        await self._producer.start()
+        await producer.start()
+        self._producer = producer
         logger.info("Kafka producer started.")
 
     async def stop(self) -> None:
@@ -46,8 +48,8 @@ class KafkaProducerWrapper:
             )
             return
         try:
-            await self._producer.send_and_wait(topic, value=value, key=key)
-            logger.debug("Sent message to topic %s: %s", topic, value)
+            await self._producer.send(topic, value=value, key=key)
+            logger.debug("Queued message to topic %s: %s", topic, value)
         except Exception as e:
             logger.error(
                 "Failed to send message to topic %s: %s", topic, str(e)
